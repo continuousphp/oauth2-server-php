@@ -326,11 +326,11 @@ class Bootstrap
 
     private function createPostgresDb()
     {
-        if (!`psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='postgres'"`) {
+        if (!`psql -U postgres postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='postgres'"`) {
             `createuser -s -r postgres`;
         }
 
-        `createdb -O postgres oauth2_server_php`;
+        `createdb -U postgres -O postgres oauth2_server_php`;
     }
 
     private function populatePostgresDb(\PDO $pdo)
@@ -340,8 +340,8 @@ class Bootstrap
 
     private function removePostgresDb()
     {
-        if (trim(`psql -l | grep oauth2_server_php | wc -l`)) {
-            `dropdb oauth2_server_php`;
+        if (trim(`psql -U postgres -l | grep oauth2_server_php | wc -l`)) {
+            `dropdb -U postgres oauth2_server_php`;
         }
     }
 
